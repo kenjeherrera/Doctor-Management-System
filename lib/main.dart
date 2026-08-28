@@ -4,46 +4,40 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget{
+class MyApp extends StatefulWidget {
   @override
-  State<MyApp> createState(){
+  State<MyApp> createState() {
     return MyAppState();
   }
 }
 
 class MyAppState extends State<MyApp>{
-  List<Map<String, String>> patients = [];
-  TextEditingController  patientNameController =
+  List<Map<String,String>> patients = [];
+
+  TextEditingController nameController =
   TextEditingController();
 
   TextEditingController doctorController =
   TextEditingController();
 
-
   @override
   Widget build (BuildContext context){
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text("Kenje Clinic"),
-        ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Add patient"),
-
-              SizedBox(height: 20,),
+              Text("Register Appointment"),
+              SizedBox(height:20,),
 
               TextField(
-                controller: patientNameController,
+                controller: nameController,
                 decoration: InputDecoration(
                   labelText: "Patient Name",
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 20,),
-
               TextField(
                 controller: doctorController,
                 decoration: InputDecoration(
@@ -51,57 +45,59 @@ class MyAppState extends State<MyApp>{
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 20,),
-
+              SizedBox(height: 10,),
               ElevatedButton(
-                onPressed:() {
-                  if (patientNameController.text.isEmpty ||
-                      doctorController.text.isEmpty) {
-                    print("Please fill in all fields");
-                  } else {
+                onPressed:(){
+                  if (nameController.text.isEmpty || doctorController.text.isEmpty){
+                    print("please fill all fields");
+                  }else {
                     setState(() {
-                      patients.add({
-                        "name": patientNameController.text,
-                        "doctor": doctorController.text,
-                        "status": "pending",
-                      });
-                      patientNameController.clear();
+                      patients.add(
+                          {
+                            "name": nameController.text,
+                            "doctor": doctorController.text,
+                            "status": "Pending",
+                          }
+                      );
+                      nameController.clear();
                       doctorController.clear();
                     });
                   }
                 },
-                child: Text("Register Patient"),
+                child: Text("Register"),
               ),
 
               Expanded(
                 child:ListView.builder(
                   itemCount: patients.length,
-                  itemBuilder:(context, index){
+                  itemBuilder: (context,index){
                     return Column(
-                      children:[
-                        Text("Patient Name: ${patients[index]["name"]}"),
+                      children: [
+                        Text("Name: ${patients[index]["name"]}"),
                         Text("Doctor: ${patients[index]["doctor"]}"),
                         Text("Status: ${patients[index]["status"]}"),
-
-                        SizedBox(height:10,),
-                        ElevatedButton(
-                          onPressed: (){
-                            setState(() {
-                              patients[index]["status"] = "Checked-In";
-                            });
-                          },
-                          child:Text("Check-In"),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                              ElevatedButton(
+                                onPressed:(){
+                                  setState((){
+                                    patients[index]["status"] = "Confirmed";
+                                  });
+                                },
+                                child: Text("confirm"),
+                              ),
+                            SizedBox(width: 10,),
+                            ElevatedButton(
+                              onPressed:(){
+                                setState((){
+                                  patients.removeAt(index);
+                                });
+                              },
+                              child: Text("delete"),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 10,),
-                        ElevatedButton(
-                          onPressed: (){
-                            setState(() {
-                              patients[index]["status"] = "Cancelled";
-                              patients.removeAt(index);
-                            });
-                          },
-                          child: Text("Delete"),
-                        )
                       ],
                     );
                   }
@@ -109,6 +105,10 @@ class MyAppState extends State<MyApp>{
               )
             ],
           ),
+        ),
+        appBar: AppBar(
+          title: Text("Kenje Clinic"),
+          centerTitle: true,
         ),
       ),
     );
