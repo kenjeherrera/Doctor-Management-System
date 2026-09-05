@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-void main() {
+void main(){
   runApp(MyApp());
 }
-
 class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() {
@@ -12,8 +11,7 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp>{
-  List<Map<String,String>> patients = [];
-
+  List<Map<String,String>> patients =[];
   TextEditingController nameController =
   TextEditingController();
 
@@ -28,76 +26,79 @@ class MyAppState extends State<MyApp>{
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Register Appointment"),
-              SizedBox(height:20,),
-
+              Text("Appointment Tracker"),
+              SizedBox(height: 20,),
               TextField(
                 controller: nameController,
                 decoration: InputDecoration(
                   labelText: "Patient Name",
                   border: OutlineInputBorder(),
-                ),
+                )
               ),
+
+              SizedBox(height: 20,),
               TextField(
                 controller: doctorController,
                 decoration: InputDecoration(
-                  labelText: "Doctor",
+                  labelText: "Doctor Name",
                   border: OutlineInputBorder(),
-                ),
               ),
-              SizedBox(height: 10,),
+              ),
               ElevatedButton(
-                onPressed:(){
-                  if (nameController.text.isEmpty || doctorController.text.isEmpty){
-                    print("please fill all fields");
+                onPressed: (){
+                  if (nameController.text.isEmpty || doctorController.text.isEmpty) {
+                    print("Please fill in all fields");
                   }else {
                     setState(() {
-                      patients.add(
-                          {
-                            "name": nameController.text,
-                            "doctor": doctorController.text,
-                            "status": "Pending",
-                          }
-                      );
+                      patients.add({
+                        "name": nameController.text,
+                        "doctor": doctorController.text,
+                        "status": "Pending",
+                      });
                       nameController.clear();
                       doctorController.clear();
                     });
                   }
                 },
-                child: Text("Register"),
+                child: Text("Register Appointment"),
               ),
 
+              SizedBox(height: 20,),
+              Text("Appointments"),
               Expanded(
                 child:ListView.builder(
                   itemCount: patients.length,
-                  itemBuilder: (context,index){
+                  itemBuilder: (context, index){
                     return Column(
                       children: [
-                        Text("Name: ${patients[index]["name"]}"),
-                        Text("Doctor: ${patients[index]["doctor"]}"),
+                        SizedBox(height: 20,),
+                        Text("Patient Name: ${patients[index]["name"]}"),
+                        SizedBox(height: 10,),
+                        Text("doctor: ${patients[index]["doctor"]}"),
+                        SizedBox(height: 10,),
                         Text("Status: ${patients[index]["status"]}"),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                              ElevatedButton(
-                                onPressed:(){
-                                  setState((){
-                                    patients[index]["status"] = "Confirmed";
-                                  });
-                                },
-                                child: Text("confirm"),
-                              ),
+                            ElevatedButton(
+                              onPressed: (){
+                                setState((){
+                                  patients[index]["status"] = "Confirmed";
+                                });
+                              },
+                              child: Text("Confirm"),
+                            ),
                             SizedBox(width: 10,),
                             ElevatedButton(
-                              onPressed:(){
-                                setState((){
+                              onPressed: (){
+                                setState(() {
                                   patients.removeAt(index);
                                 });
                               },
-                              child: Text("delete"),
-                            ),
+                              child: Text("Delete"),
+                            )
                           ],
-                        ),
+                        )
                       ],
                     );
                   }
@@ -107,7 +108,7 @@ class MyAppState extends State<MyApp>{
           ),
         ),
         appBar: AppBar(
-          title: Text("Kenje Clinic"),
+          title: Text("Eye Optical Clinic"),
           centerTitle: true,
         ),
       ),
